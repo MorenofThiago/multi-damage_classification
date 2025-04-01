@@ -4,32 +4,22 @@ Created on Wed Oct 23 15:39:29 2024
 
 @author: Thiago Moreno Fernandes
 
-Multi damage classification with Piecewise Aggregate Approximation (PAA) e CNN
+Multi damage classification with Piecewise Aggregate Approximation (PAA) and Convolutional Neural Network
 """
-
 
 import tensorflow as tf
 import numpy as np
 import pandas as pd
-from tensorflow import keras
-from sklearn.model_selection import KFold
-from scipy.io import loadmat
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, accuracy_score
-from sklearn.model_selection import train_test_split
 import seaborn as sns
 import time
-import tkinter as tk
 
-from scipy import stats
+
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras.callbacks import ReduceLROnPlateau
-from tensorflow.keras import regularizers, layers, initializers
-from tensorflow.keras.layers import Lambda
-from tensorflow.keras.utils import to_categorical
-from pyts.approximation import PiecewiseAggregateApproximation, SymbolicAggregateApproximation
-from sklearn.preprocessing import RobustScaler, Normalizer
-from scipy.stats import rankdata
+from scipy.io import loadmat
+from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.model_selection import train_test_split
 
         
 plt.rcParams['font.family'] = 'Times New Roman' # Fonte dos plots
@@ -37,27 +27,25 @@ plt.rcParams['font.family'] = 'Times New Roman' # Fonte dos plots
 start_time = time.time()  # Record the start time
 
 # Número de rodadas
-n_runs = 10
-
+n_runs = 20
 
 # Selecionar 200 dados para treinamento de cada cenário
 train_samples = 100
 test_samples = 100
 
 # Carregar os dados
-PosSensor = 'TF'
-Vagao = 'PrimVag'
+PosSensor = 'CB'  #CB: Car body; FB: Front bogie
 # Carregar os dados
-Dados_Baseline = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case1_Cut.mat') 
-Dados_Case2 = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case2_Cut.mat') 
-Dados_Case3 = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case3_Cut.mat') 
-Dados_Case4 = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case4_Cut.mat') 
-Dados_Case5 = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case5_Cut.mat') 
-Dados_Case6 = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case6_Cut.mat')
-Dados_Case7 = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case7_Cut.mat') 
-Dados_Case8 = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case8_Cut.mat') 
-Dados_Case9 = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case9_Cut.mat') 
-Dados_Case10 = loadmat(f'Data19-10-24_{PosSensor}_{Vagao}_Case10_Cut.mat') 
+Dados_Baseline = loadmat(f'Data19-10-24_{PosSensor}_Case1.mat') 
+Dados_Case2 = loadmat(f'Data19-10-24_{PosSensor}_Case2.mat') 
+Dados_Case3 = loadmat(f'Data19-10-24_{PosSensor}_Case3.mat') 
+Dados_Case4 = loadmat(f'Data19-10-24_{PosSensor}_Case4.mat') 
+Dados_Case5 = loadmat(f'Data19-10-24_{PosSensor}_Case5.mat') 
+Dados_Case6 = loadmat(f'Data19-10-24_{PosSensor}_Case6.mat')
+Dados_Case7 = loadmat(f'Data19-10-24_{PosSensor}_Case7.mat') 
+Dados_Case8 = loadmat(f'Data19-10-24_{PosSensor}_Case8.mat') 
+Dados_Case9 = loadmat(f'Data19-10-24_{PosSensor}_Case9.mat') 
+Dados_Case10 = loadmat(f'Data19-10-24_{PosSensor}_Case10.mat') 
 
 dataBaseline = Dados_Baseline['Baseline']               
 dataCase2 = Dados_Case2['Case2']                        
@@ -72,7 +60,6 @@ dataCase10 = Dados_Case10['Case10']
 
 
 # Normalização dos dados  Testar outras técnicas de normalização
-
 ## Normalização min-max
 def normalize_data(data, PosSensor='TF'):
     if PosSensor == 'TF':
@@ -192,7 +179,7 @@ def apply_paa(data, paa_size):
     return np.mean(data.reshape(n_samples, paa_size, step), axis=2)
 
 # Aplicar PAA nos dados de treino e teste
-window_size = 1
+window_size = 10
 paa_size = int(5830/window_size)
 
 
@@ -201,7 +188,7 @@ def create_model(n_classes=10):
     #initializer = tf.keras.initializers.HeNormal()
     global PosSensor
 
-    if PosSensor == 'TF':
+    if PosSensor == 'FB':
         
         # Arquitetura para 'TF'
         model = tf.keras.Sequential([
@@ -220,7 +207,7 @@ def create_model(n_classes=10):
 
         
 
-    elif PosSensor == 'VG':
+    elif PosSensor == 'CB':
         
         
         input_layer = tf.keras.layers.Input(shape=(paa_size, 1))
