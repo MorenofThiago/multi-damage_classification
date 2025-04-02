@@ -38,27 +38,12 @@ test_samples = 100
 # CB: Car body; FB: Front bogie
 PosSensor = 'CB'  
 
-Dados_Baseline = loadmat(f'Data_{PosSensor}_Case1.mat') 
-Dados_Case2 = loadmat(f'Data_{PosSensor}_Case2.mat') 
-Dados_Case3 = loadmat(f'Data_{PosSensor}_Case3.mat') 
-Dados_Case4 = loadmat(f'Data_{PosSensor}_Case4.mat') 
-Dados_Case5 = loadmat(f'Data_{PosSensor}_Case5.mat') 
-Dados_Case6 = loadmat(f'Data_{PosSensor}_Case6.mat')
-Dados_Case7 = loadmat(f'Data_{PosSensor}_Case7.mat') 
-Dados_Case8 = loadmat(f'Data_{PosSensor}_Case8.mat') 
-Dados_Case9 = loadmat(f'Data_{PosSensor}_Case9.mat') 
-Dados_Case10 = loadmat(f'Data_{PosSensor}_Case10.mat') 
+cases = ['Baseline', 'Case2', 'Case3', 'Case4', 'Case5', 'Case6', 'Case7', 'Case8', 'Case9', 'Case10']
 
-dataBaseline = Dados_Baseline['Baseline']               
-dataCase2 = Dados_Case2['Case2']                        
-dataCase3 = Dados_Case3['Case3']                      
-dataCase4 = Dados_Case4['Case4']                       
-dataCase5 = Dados_Case5['Case5']                        
-dataCase6 = Dados_Case6['Case6']                        
-dataCase7 = Dados_Case7['Case7']                        
-dataCase8 = Dados_Case8['Case8']                        
-dataCase9 = Dados_Case9['Case9']                        
-dataCase10 = Dados_Case10['Case10']  
+data = {}
+
+for case in cases:
+    data[case] = loadmat(f'Data_{PosSensor}_{case}.mat')[case]
 
 ## Min-Max normalization
 def normalize_data(data):
@@ -68,94 +53,39 @@ def normalize_data(data):
     return normalized_data
 
 #Apply the normalization
-dataBaseline = normalize_data(dataBaseline)
-dataCase2 = normalize_data(dataCase2)
-dataCase3 = normalize_data(dataCase3)
-dataCase4 = normalize_data(dataCase4)
-dataCase5 = normalize_data(dataCase5)
-dataCase6 = normalize_data(dataCase6)
-dataCase7 = normalize_data(dataCase7)
-dataCase8 = normalize_data(dataCase8)
-dataCase9 = normalize_data(dataCase9)
-dataCase10 = normalize_data(dataCase10)
-
-dataConc = pd.DataFrame()
+for case in cases:
+    data[case] = normalize_data(data[case])
 
 # Data sampling
-dataBaseline_df = pd.DataFrame(dataBaseline)
-dataBaseline_df['y'] = 0
-dataBaseline_sampled_train = dataBaseline_df.sample(n=train_samples, random_state=42)
-dataBaseline_sampled_test = dataBaseline_df.drop(dataBaseline_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataBaseline_sampled_train], ignore_index=True)
+y_values = range(10)  # To associate 0 with 'Baseline', 1 with 'Case2', ..., 9 with 'Case10'
 
-# Adicionar dataCase2 com coluna y_Case2
-dataCase2_df = pd.DataFrame(dataCase2)
-dataCase2_df['y'] = 1
-dataCase2_sampled_train = dataCase2_df.sample(n=train_samples, random_state=42)
-dataCase2_sampled_test = dataCase2_df.drop(dataCase2_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataCase2_sampled_train], ignore_index=True)
+# Initialize the DataFrame for concatenating the data
+dataConc = pd.DataFrame()
 
-# Adicionar dataDez com coluna y_Case3
-dataCase3_df = pd.DataFrame(dataCase3)
-dataCase3_df['y'] = 2
-dataCase3_sampled_train = dataCase3_df.sample(n=train_samples, random_state=42)
-dataCase3_sampled_test = dataCase3_df.drop(dataCase3_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataCase3_sampled_train], ignore_index=True)
+# Initialize the DataFrame for the test data
+dataConcTeste = pd.DataFrame()
 
-# Adicionar dataVinte com coluna y_Case4
-dataCase4_df = pd.DataFrame(dataCase4)
-dataCase4_df['y'] = 3
-dataCase4_sampled_train = dataCase4_df.sample(n=train_samples, random_state=42)
-dataCase4_sampled_test = dataCase4_df.drop(dataCase4_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataCase4_sampled_train], ignore_index=True)
-
-# Adicionar dataVinte com coluna y_Case5
-dataCase5_df = pd.DataFrame(dataCase5)
-dataCase5_df['y'] = 4
-dataCase5_sampled_train = dataCase5_df.sample(n=train_samples, random_state=42)
-dataCase5_sampled_test = dataCase5_df.drop(dataCase5_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataCase5_sampled_train], ignore_index=True)
-
-# Adicionar dataVinte com coluna y_Case6
-dataCase6_df = pd.DataFrame(dataCase6)
-dataCase6_df['y'] = 5
-dataCase6_sampled_train = dataCase6_df.sample(n=train_samples, random_state=42)
-dataCase6_sampled_test = dataCase6_df.drop(dataCase6_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataCase6_sampled_train], ignore_index=True)
-
-# Adicionar dataVinte com coluna y_Case6
-dataCase7_df = pd.DataFrame(dataCase7)
-dataCase7_df['y'] = 6
-dataCase7_sampled_train = dataCase7_df.sample(n=train_samples, random_state=42)
-dataCase7_sampled_test = dataCase7_df.drop(dataCase7_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataCase7_sampled_train], ignore_index=True)
-
-dataCase8_df = pd.DataFrame(dataCase8)
-dataCase8_df['y'] = 7
-dataCase8_sampled_train = dataCase8_df.sample(n=train_samples, random_state=42)
-dataCase8_sampled_test = dataCase8_df.drop(dataCase8_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataCase8_sampled_train], ignore_index=True)
-
-dataCase9_df = pd.DataFrame(dataCase9)
-dataCase9_df['y'] = 8
-dataCase9_sampled_train = dataCase9_df.sample(n=train_samples, random_state=42)
-dataCase9_sampled_test = dataCase9_df.drop(dataCase9_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataCase9_sampled_train], ignore_index=True)
-
-dataCase10_df = pd.DataFrame(dataCase10)
-dataCase10_df['y'] = 9
-dataCase10_sampled_train = dataCase10_df.sample(n=train_samples, random_state=42)
-dataCase10_sampled_test = dataCase10_df.drop(dataCase10_sampled_train.index).sample(n=test_samples, random_state=42)
-dataConc = pd.concat([dataConc, dataCase10_sampled_train], ignore_index=True)
-
-
-dataConcTeste = pd.concat([dataBaseline_sampled_test, dataCase2_sampled_test, dataCase3_sampled_test, dataCase4_sampled_test,
-                                dataCase5_sampled_test, dataCase6_sampled_test, dataCase7_sampled_test, 
-                                dataCase8_sampled_test, dataCase9_sampled_test, dataCase10_sampled_test], ignore_index=True)
-
+# Loop to iterate over the cases and process them
+for case, y in zip(cases, y_values):
+    # Load the data dynamically using the case name
+    data_case = globals()[f"data{case}"]  
+    
+    # Create a DataFrame and add the 'y' column
+    data_case_df = pd.DataFrame(data_case)
+    data_case_df['y'] = y
+    
+    # Sampling for training data
+    data_case_sampled_train = data_case_df.sample(n=train_samples, random_state=42)
+    data_case_sampled_test = data_case_df.drop(data_case_sampled_train.index).sample(n=test_samples, random_state=42)
+    
+    # Concatenate the training data to dataConc
+    dataConc = pd.concat([dataConc, data_case_sampled_train], ignore_index=True)
+    
+    # Concatenate the test data to dataConcTeste
+    dataConcTeste = pd.concat([dataConcTeste, data_case_sampled_test], ignore_index=True)
 
     
-# Preencher valores nulos, se houver
+# Fills any missing (NaN) values with 0 if there are any
 dataConc = dataConc.fillna(0)
 dataConcTeste = dataConcTeste.fillna(0)
 
