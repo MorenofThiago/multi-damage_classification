@@ -25,6 +25,10 @@ plt.rcParams['font.family'] = 'Times New Roman'
 
 start_time = time.time()  # Record the start time
 
+# Train and test samples
+train_samples = 100
+test_samples = 100
+
 # Number of the algorithm executions
 n_runs = 20
 
