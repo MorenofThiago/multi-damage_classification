@@ -28,12 +28,6 @@ start_time = time.time()  # Record the start time
 # Number of the algorithm executions
 n_runs = 20
 
-# Select the number of vehicle passes for training and testing the algorithm
-train_samples = 100
-test_samples = 100
-
-# Load the data
-
 # Select the positioning of the sensor to be evaluated
 # CB: Car body; FB: Front bogie
 PosSensor = 'CB'  
@@ -41,7 +35,6 @@ PosSensor = 'CB'
 cases = ['Baseline', 'Case2', 'Case3', 'Case4', 'Case5', 'Case6', 'Case7', 'Case8', 'Case9', 'Case10']
 
 data = {}
-
 for case in cases:
     data[case] = loadmat(f'Data_{PosSensor}_{case}.mat')[case]
 
@@ -68,7 +61,7 @@ dataConcTeste = pd.DataFrame()
 # Loop to iterate over the cases and process them
 for case, y in zip(cases, y_values):
     # Load the data dynamically using the case name
-    data_case = globals()[f"data{case}"]  
+    data_case = data[case]  
     
     # Create a DataFrame and add the 'y' column
     data_case_df = pd.DataFrame(data_case)
@@ -239,7 +232,7 @@ plt.xticks(fontsize=14)
 plt.yticks(fontsize=14)
 
 # Save the best confusion matrix plot
-plt.savefig(f'ConfusionMatrix_{PosSensor}_Normalization_WithoutPAA_BayesOpt.png', dpi=300, bbox_inches='tight')
+plt.savefig(f'ConfusionMatrix_{PosSensor}.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # Plot the boxplot
