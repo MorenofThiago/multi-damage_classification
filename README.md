@@ -1,13 +1,13 @@
 # multi-damage_classification
 This repository provides code for a methodology that classifies multi-damage scenarios in railway bridges using drive-by measurements. Below is a step-by-step guide to the main scripts and dataset organization.
 
-Scripts:
+## Scripts:
 
 data-processing.py – The main script for loading, preprocessing, and analyzing the acceleration data.
 
 hyperparameters-optimization.py – Optimizes the hyperparameters of the classification model to improve performance.
 
-Datasets:
+## Datasets:
 
 The acceleration datasets are divided into 20 files, categorized by the sensor placement:
 
@@ -21,6 +21,6 @@ Baseline – Undamaged structure.
 
 Case2 to Case10 – Different types of structural damage.
 
-File Naming Convention
+## File Naming Convention
 
 Data_{SensorPosition}_{Scenario}.mat
