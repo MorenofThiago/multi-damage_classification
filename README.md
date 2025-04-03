@@ -1,5 +1,5 @@
 # multi-damage_classification
-This repository provides code for a methodology that classifies multi-damage scenarios in railway bridges using drive-by measurements. Below is a step-by-step guide to the main scripts and dataset organization.
+This repository provides code for a methodology that classifies multi-damage scenarios in railway bridges using drive-by measurements. Below is presented a step-by-step guide to the main scripts and dataset organization.
 
 ### Scripts:
 
@@ -21,6 +21,6 @@ Baseline – Undamaged structure.
 
 Case2 to Case10 – Different types of structural damage.
 
-### File Naming Convention
+### File Naming Convention:
 
 Data_{SensorPosition}_{Scenario}.mat
