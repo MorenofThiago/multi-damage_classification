@@ -1,15 +1,12 @@
 import tensorflow as tf
 import numpy as np
 import pandas as pd
-from tensorflow import keras
-from scipy.io import loadmat
-import random
-from sklearn.model_selection import train_test_split
 import keras_tuner as kt
 import os
 import shutil
-from tensorflow.keras import regularizers, layers, initializers
-from keras_tuner import HyperModel
+
+from scipy.io import loadmat
+from sklearn.model_selection import train_test_split
 
 
 # Clear the tuner directory
