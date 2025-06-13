@@ -1,5 +1,6 @@
 # multi-damage_classification
-This repository provides code for a methodology that classifies multi-damage scenarios in railway bridges using drive-by measurements. Below is presented a step-by-step guide to the main scripts and dataset organization.
+This repository provides code for a methodology that classifies multi-damage scenarios in railway bridges using drive-by measurements. This study resulted in a published paper that can be found at: https://www.worldscientific.com/doi/abs/10.1142/S0219455426503165. \
+Below is presented a step-by-step guide to the main scripts and dataset organization.
 
 ### Scripts:
 data-processing.py – The main script for loading, preprocessing, and analyzing the acceleration data.\
